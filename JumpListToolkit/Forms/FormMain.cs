@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -7,7 +6,7 @@ using System.Drawing;
 using System.Drawing.Pictograms;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Forms.Pictograms;
 using Toolkit.Models;
@@ -23,7 +22,7 @@ namespace Toolkit.Forms
         {
             InitializeComponent();
 
-            Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetEntryAssembly().Location);
+            Icon = Icon.ExtractAssociatedIcon(Assembly.GetEntryAssembly().Location);
 
             // Icons
             toolStripButtonNew.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.insert_drive_file, 48, Color.White);
@@ -82,19 +81,19 @@ namespace Toolkit.Forms
 
         #region MainActions
 
-        private void toolStripButtonNew_Click(object sender, EventArgs e)
+        private void ToolStripButtonNew_Click(object sender, EventArgs e)
         {
             Source = string.Empty;
             Model = new List<Link>();
             RenderContent();
         }
 
-        private void toolStripButtonOpen_Click(object sender, EventArgs e)
+        private void ToolStripButtonOpen_Click(object sender, EventArgs e)
         {
             openFileDialogSettings.ShowDialog();
         }
 
-        private void openFileDialogSettings_FileOk(object sender, CancelEventArgs e)
+        private void OpenFileDialogSettings_FileOk(object sender, CancelEventArgs e)
         {
             if (!string.IsNullOrEmpty(openFileDialogSettings.FileName) && File.Exists(openFileDialogSettings.FileName))
             {
@@ -112,7 +111,7 @@ namespace Toolkit.Forms
             }
         }
 
-        private void toolStripButtonSave_Click(object sender, EventArgs e)
+        private void ToolStripButtonSave_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(Source) || !File.Exists(Path.ChangeExtension(Source, "lnk")))
             {
@@ -122,11 +121,11 @@ namespace Toolkit.Forms
             else
             {
                 saveFileDialogSettings.FileName = Source;
-                saveFileDialogSettings_FileOk(sender, new CancelEventArgs(false));
+                SaveFileDialogSettings_FileOk(sender, new CancelEventArgs(false));
             }
         }
 
-        private void saveFileDialogSettings_FileOk(object sender, CancelEventArgs e)
+        private void SaveFileDialogSettings_FileOk(object sender, CancelEventArgs e)
         {
             if (Path.GetExtension(saveFileDialogSettings.FileName).ToLower() == ".lnk")
             {
@@ -143,7 +142,7 @@ namespace Toolkit.Forms
 
         #region ItemActions
 
-        private void toolStripButtonAdd_Click(object sender, EventArgs e)
+        private void ToolStripButtonAdd_Click(object sender, EventArgs e)
         {
             var child = new FormEditor(new Link()) { StartPosition = FormStartPosition.CenterParent, Icon = this.Icon };
             if (child.ShowDialog() == DialogResult.OK)
@@ -153,7 +152,7 @@ namespace Toolkit.Forms
             }
         }
 
-        private void toolStripButtonEdit_Click(object sender, EventArgs e)
+        private void ToolStripButtonEdit_Click(object sender, EventArgs e)
         {
             if (listViewTasks.SelectedItems != null && listViewTasks.SelectedItems.OfType<ListViewItem>().Any())
             {
@@ -176,7 +175,7 @@ namespace Toolkit.Forms
             }
         }
 
-        private void toolStripButtonDelete_Click(object sender, EventArgs e)
+        private void ToolStripButtonDelete_Click(object sender, EventArgs e)
         {
             if (listViewTasks.SelectedItems != null && listViewTasks.SelectedItems.OfType<ListViewItem>().Any())
                 foreach (var item in listViewTasks.SelectedItems.OfType<ListViewItem>())
@@ -186,7 +185,7 @@ namespace Toolkit.Forms
                 }
         }
 
-        private void listViewTasks_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ListViewTasks_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (listViewTasks.SelectedItems != null && listViewTasks.SelectedItems.OfType<ListViewItem>().Any())
             {
@@ -203,21 +202,26 @@ namespace Toolkit.Forms
 
         #endregion ItemActions
 
-        private void toolStripButtonRefresh_Click(object sender, EventArgs e)
+        private void ToolStripButtonRefresh_Click(object sender, EventArgs e)
         {
             if (Model != null)
                 Program.RegisterTaskBarActions(Model);
         }
 
-        private void toolStripButtonAbout_Click(object sender, EventArgs e)
+        private void ToolStripButtonAbout_Click(object sender, EventArgs e)
         {
             var child = new FormAbout();
             child.ShowDialog();
         }
 
-        private void toolStripButtonExit_Click(object sender, EventArgs e)
+        private void ToolStripButtonExit_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private async void FormMain_Load(object sender, EventArgs e)
+        {
+            await GitHubInfo.CheckForUpdateAsync();
         }
     }
 }

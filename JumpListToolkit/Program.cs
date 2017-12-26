@@ -8,8 +8,6 @@ using System.Drawing.Pictograms;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Toolkit.Models;

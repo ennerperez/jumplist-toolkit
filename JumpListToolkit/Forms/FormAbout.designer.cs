@@ -38,6 +38,7 @@
             this.tabPageLog = new System.Windows.Forms.TabPage();
             this.tabPageLicense = new System.Windows.Forms.TabPage();
             this.richTextBoxLicense = new System.Windows.Forms.RichTextBox();
+            this.buttonUpdate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIcon)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPageLog.SuspendLayout();
@@ -49,7 +50,7 @@
             resources.ApplyResources(this.buttonClose, "buttonClose");
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.UseVisualStyleBackColor = true;
-            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            this.buttonClose.Click += new System.EventHandler(this.ButtonClose_Click);
             // 
             // labelAbout
             // 
@@ -75,7 +76,7 @@
             this.linkLabelWeb.LinkColor = System.Drawing.SystemColors.HotTrack;
             this.linkLabelWeb.Name = "linkLabelWeb";
             this.linkLabelWeb.TabStop = true;
-            this.linkLabelWeb.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelWeb_LinkClicked);
+            this.linkLabelWeb.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelWeb_LinkClicked);
             // 
             // tabControl1
             // 
@@ -105,6 +106,13 @@
             this.richTextBoxLicense.Name = "richTextBoxLicense";
             this.richTextBoxLicense.ReadOnly = true;
             // 
+            // buttonUpdate
+            // 
+            resources.ApplyResources(this.buttonUpdate, "buttonUpdate");
+            this.buttonUpdate.Name = "buttonUpdate";
+            this.buttonUpdate.UseVisualStyleBackColor = true;
+            this.buttonUpdate.Click += new System.EventHandler(this.ButtonUpdate_Click);
+            // 
             // FormAbout
             // 
             resources.ApplyResources(this, "$this");
@@ -113,6 +121,7 @@
             this.Controls.Add(this.linkLabelWeb);
             this.Controls.Add(this.pictureBoxIcon);
             this.Controls.Add(this.labelAbout);
+            this.Controls.Add(this.buttonUpdate);
             this.Controls.Add(this.buttonClose);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -121,6 +130,7 @@
             this.Name = "FormAbout";
             this.ShowInTaskbar = false;
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.FormAbout_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIcon)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPageLog.ResumeLayout(false);
@@ -141,5 +151,6 @@
         private System.Windows.Forms.TabPage tabPageLog;
         private System.Windows.Forms.TabPage tabPageLicense;
         private System.Windows.Forms.RichTextBox richTextBoxLicense;
+        private System.Windows.Forms.Button buttonUpdate;
     }
 }

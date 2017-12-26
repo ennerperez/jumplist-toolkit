@@ -83,7 +83,7 @@
             this.toolStripButtonNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonNew.Margin = new System.Windows.Forms.Padding(0);
             this.toolStripButtonNew.Name = "toolStripButtonNew";
-            this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
+            this.toolStripButtonNew.Click += new System.EventHandler(this.ToolStripButtonNew_Click);
             // 
             // toolStripButtonOpen
             // 
@@ -91,7 +91,7 @@
             this.toolStripButtonOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonOpen.Margin = new System.Windows.Forms.Padding(0);
             this.toolStripButtonOpen.Name = "toolStripButtonOpen";
-            this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
+            this.toolStripButtonOpen.Click += new System.EventHandler(this.ToolStripButtonOpen_Click);
             // 
             // toolStripButtonSave
             // 
@@ -99,7 +99,7 @@
             this.toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonSave.Margin = new System.Windows.Forms.Padding(0);
             this.toolStripButtonSave.Name = "toolStripButtonSave";
-            this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
+            this.toolStripButtonSave.Click += new System.EventHandler(this.ToolStripButtonSave_Click);
             // 
             // toolStripSeparator1
             // 
@@ -112,7 +112,7 @@
             this.toolStripButtonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonAdd.Margin = new System.Windows.Forms.Padding(0);
             this.toolStripButtonAdd.Name = "toolStripButtonAdd";
-            this.toolStripButtonAdd.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
+            this.toolStripButtonAdd.Click += new System.EventHandler(this.ToolStripButtonAdd_Click);
             // 
             // toolStripButtonEdit
             // 
@@ -120,7 +120,7 @@
             this.toolStripButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonEdit.Margin = new System.Windows.Forms.Padding(0);
             this.toolStripButtonEdit.Name = "toolStripButtonEdit";
-            this.toolStripButtonEdit.Click += new System.EventHandler(this.toolStripButtonEdit_Click);
+            this.toolStripButtonEdit.Click += new System.EventHandler(this.ToolStripButtonEdit_Click);
             // 
             // toolStripButtonDelete
             // 
@@ -128,7 +128,7 @@
             this.toolStripButtonDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonDelete.Margin = new System.Windows.Forms.Padding(0);
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
+            this.toolStripButtonDelete.Click += new System.EventHandler(this.ToolStripButtonDelete_Click);
             // 
             // toolStripButtonClose
             // 
@@ -137,7 +137,7 @@
             this.toolStripButtonClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonClose.Margin = new System.Windows.Forms.Padding(0);
             this.toolStripButtonClose.Name = "toolStripButtonClose";
-            this.toolStripButtonClose.Click += new System.EventHandler(this.toolStripButtonExit_Click);
+            this.toolStripButtonClose.Click += new System.EventHandler(this.ToolStripButtonExit_Click);
             // 
             // toolStripButtonAbout
             // 
@@ -146,7 +146,7 @@
             this.toolStripButtonAbout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonAbout.Margin = new System.Windows.Forms.Padding(0);
             this.toolStripButtonAbout.Name = "toolStripButtonAbout";
-            this.toolStripButtonAbout.Click += new System.EventHandler(this.toolStripButtonAbout_Click);
+            this.toolStripButtonAbout.Click += new System.EventHandler(this.ToolStripButtonAbout_Click);
             // 
             // toolStripSeparator8
             // 
@@ -159,7 +159,7 @@
             this.toolStripButtonRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonRefresh.Margin = new System.Windows.Forms.Padding(0);
             this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
-            this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
+            this.toolStripButtonRefresh.Click += new System.EventHandler(this.ToolStripButtonRefresh_Click);
             // 
             // listViewTasks
             // 
@@ -171,7 +171,7 @@
             this.listViewTasks.SmallImageList = this.imageListIcons;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Tile;
-            this.listViewTasks.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewTasks_MouseDoubleClick);
+            this.listViewTasks.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListViewTasks_MouseDoubleClick);
             // 
             // contextMenuStripItemActions
             // 
@@ -186,19 +186,19 @@
             // 
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
             resources.ApplyResources(this.addToolStripMenuItem, "addToolStripMenuItem");
-            this.addToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
+            this.addToolStripMenuItem.Click += new System.EventHandler(this.ToolStripButtonAdd_Click);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             resources.ApplyResources(this.editToolStripMenuItem, "editToolStripMenuItem");
-            this.editToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonEdit_Click);
+            this.editToolStripMenuItem.Click += new System.EventHandler(this.ToolStripButtonEdit_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             resources.ApplyResources(this.deleteToolStripMenuItem, "deleteToolStripMenuItem");
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.ToolStripButtonDelete_Click);
             // 
             // imageListIcons
             // 
@@ -210,13 +210,13 @@
             // 
             this.openFileDialogSettings.DefaultExt = "json";
             resources.ApplyResources(this.openFileDialogSettings, "openFileDialogSettings");
-            this.openFileDialogSettings.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialogSettings_FileOk);
+            this.openFileDialogSettings.FileOk += new System.ComponentModel.CancelEventHandler(this.OpenFileDialogSettings_FileOk);
             // 
             // saveFileDialogSettings
             // 
             this.saveFileDialogSettings.DefaultExt = "json";
             resources.ApplyResources(this.saveFileDialogSettings, "saveFileDialogSettings");
-            this.saveFileDialogSettings.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialogSettings_FileOk);
+            this.saveFileDialogSettings.FileOk += new System.ComponentModel.CancelEventHandler(this.SaveFileDialogSettings_FileOk);
             // 
             // FormMain
             // 
@@ -226,6 +226,7 @@
             this.Controls.Add(this.listViewTasks);
             this.Controls.Add(this.toolStripMenu);
             this.Name = "FormMain";
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.Shown += new System.EventHandler(this.FormMain_Shown);
             this.toolStripMenu.ResumeLayout(false);
             this.toolStripMenu.PerformLayout();
