@@ -159,4 +159,38 @@
   <data name="saveFileDialogSettings.Filter" xml:space="preserve">
     <value>Vinculos en JSON|*.json|Acceso directo|*.lnk|Todos los archivos|*.*</value>
   </data>
+  <data name="toolStripButtonUpdates.Text" xml:space="preserve">
+    <value>Actuali&amp;zaciones</value>
+  </data>
+  <data name="defaultToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Predeterminado</value>
+  </data>
+  <data name="labelPreview.Text" xml:space="preserve">
+    <value>Arrastre &amp;&amp; Suelte
+Cualquier archivo aquí</value>
+  </data>
+  <data name="launchToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Iniciar</value>
+  </data>
+  <data name="toolStripButtonApply.Text" xml:space="preserve">
+    <value>A&amp;plicar</value>
+  </data>
+  <data name="toolStripButtonAction.Text" xml:space="preserve">
+    <value>&amp;Propiedades</value>
+  </data>
+  <data name="toolStripButtonFile.Text" xml:space="preserve">
+    <value>&amp;Archivo</value>
+  </data>
+  <data name="saveAsToolStripMenuItem.Text" xml:space="preserve">
+    <value>G&amp;uardar como...</value>
+  </data>
+  <data name="openToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Abrir...</value>
+  </data>
+  <data name="saveToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Guardar</value>
+  </data>
+  <data name="newToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Nuevo</value>
+  </data>
 </root>

@@ -122,14 +122,14 @@
             0,
             0});
             this.numericUpDownIconIndex.Name = "numericUpDownIconIndex";
-            this.numericUpDownIconIndex.ValueChanged += new System.EventHandler(this.numericUpDownIconIndex_ValueChanged);
+            this.numericUpDownIconIndex.ValueChanged += new System.EventHandler(this.NumericUpDownIconIndex_ValueChanged);
             // 
             // buttonOk
             // 
             resources.ApplyResources(this.buttonOk, "buttonOk");
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.UseVisualStyleBackColor = true;
-            this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
+            this.buttonOk.Click += new System.EventHandler(this.ButtonOk_Click);
             // 
             // buttonCancel
             // 
@@ -149,14 +149,14 @@
             resources.ApplyResources(this.buttonFilePathExamine, "buttonFilePathExamine");
             this.buttonFilePathExamine.Name = "buttonFilePathExamine";
             this.buttonFilePathExamine.UseVisualStyleBackColor = true;
-            this.buttonFilePathExamine.Click += new System.EventHandler(this.buttonFilePathExamine_Click);
+            this.buttonFilePathExamine.Click += new System.EventHandler(this.ButtonFilePathExamine_Click);
             // 
             // buttonIconLocationExamine
             // 
             resources.ApplyResources(this.buttonIconLocationExamine, "buttonIconLocationExamine");
             this.buttonIconLocationExamine.Name = "buttonIconLocationExamine";
             this.buttonIconLocationExamine.UseVisualStyleBackColor = true;
-            this.buttonIconLocationExamine.Click += new System.EventHandler(this.buttonIconLocationExamine_Click);
+            this.buttonIconLocationExamine.Click += new System.EventHandler(this.ButtonIconLocationExamine_Click);
             // 
             // openFileDialogFile
             // 
@@ -178,7 +178,7 @@
             resources.ApplyResources(this.buttonWorkdirExamine, "buttonWorkdirExamine");
             this.buttonWorkdirExamine.Name = "buttonWorkdirExamine";
             this.buttonWorkdirExamine.UseVisualStyleBackColor = true;
-            this.buttonWorkdirExamine.Click += new System.EventHandler(this.buttonWorkdirExamine_Click);
+            this.buttonWorkdirExamine.Click += new System.EventHandler(this.ButtonWorkdirExamine_Click);
             // 
             // pictureBoxIconPreview
             // 

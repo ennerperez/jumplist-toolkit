@@ -6,6 +6,7 @@ namespace Toolkit.Models
     {
         public Link()
         {
+            Category = string.Empty;
         }
 
         public Link(string path, string title) : this()
