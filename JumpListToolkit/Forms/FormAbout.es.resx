@@ -749,4 +749,7 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Acerca de...</value>
   </data>
+  <data name="buttonUpdate.Text" xml:space="preserve">
+    <value>Act&amp;ualizar</value>
+  </data>
 </root>

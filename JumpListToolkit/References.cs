@@ -1,14 +1,18 @@
 ﻿// ----------------------------------------
 // References
-// Version 1.0.1
-// Updated 2017-11-28
+// Version 1.0.2
+// Updated 2018-12-26
 // ----------------------------------------
 
+using Octokit;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 #if DEBUG
 
@@ -112,8 +116,8 @@ namespace System.Drawing
         /// <returns>Wether or not the icon was succesfully generated</returns>
         internal static bool ConvertToIcon(string inputPath, string outputPath, int size = 16, bool preserveAspectRatio = false)
         {
-            using (FileStream inputStream = new FileStream(inputPath, FileMode.Open))
-            using (FileStream outputStream = new FileStream(outputPath, FileMode.OpenOrCreate))
+            using (FileStream inputStream = new FileStream(inputPath, IO.FileMode.Open))
+            using (FileStream outputStream = new FileStream(outputPath, IO.FileMode.OpenOrCreate))
             {
                 return ConvertToIcon(inputStream, outputStream, size, preserveAspectRatio);
             }
@@ -167,64 +171,6 @@ namespace System.Windows.Forms
 
 #endif
 
-namespace System
-{
-    internal static class ApplicationInfo
-    {
-        public static Version Version { get { return Assembly.GetCallingAssembly().GetName().Version; } }
-
-        public static string Title
-        {
-            get
-            {
-                object[] attributes = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
-                if (attributes.Length > 0)
-                {
-                    AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
-                    if (titleAttribute.Title.Length > 0) return titleAttribute.Title;
-                }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
-            }
-        }
-
-        public static string ProductName
-        {
-            get
-            {
-                object[] attributes = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                return attributes.Length == 0 ? "" : ((AssemblyProductAttribute)attributes[0]).Product;
-            }
-        }
-
-        public static string Description
-        {
-            get
-            {
-                object[] attributes = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-                return attributes.Length == 0 ? "" : ((AssemblyDescriptionAttribute)attributes[0]).Description;
-            }
-        }
-
-        public static string CopyrightHolder
-        {
-            get
-            {
-                object[] attributes = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-                return attributes.Length == 0 ? "" : ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
-            }
-        }
-
-        public static string CompanyName
-        {
-            get
-            {
-                object[] attributes = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                return attributes.Length == 0 ? "" : ((AssemblyCompanyAttribute)attributes[0]).Company;
-            }
-        }
-    }
-}
-
 namespace System.Windows.Forms
 {
     internal static partial class FormHelper
@@ -258,5 +204,102 @@ namespace System.Windows.Forms
         }
 
         #endregion Public Constructors
+    }
+}
+
+namespace System.Reflection
+{
+    [AttributeUsage(AttributeTargets.Assembly, Inherited = false)]
+    public class GitHubAttribute : Attribute
+    {
+        public GitHubAttribute()
+        {
+        }
+
+        public GitHubAttribute(string owner, string repo, string assetName = "") : base()
+        {
+            Owner = owner;
+            Repo = repo;
+            AssetName = assetName;
+        }
+
+        public string Owner { get; private set; }
+        public string Repo { get; private set; }
+        public string AssetName { get; private set; }
+
+        public override string ToString()
+        {
+            return $"https://github.com/{Owner}/{Repo}";
+        }
+    }
+
+    internal static class ApplicationInfo
+    {
+        public static Assembly Assembly => Assembly.GetCallingAssembly();
+
+        public static Version Version => ApplicationInfo.Assembly.GetName().Version;
+        public static string Title => ApplicationInfo.Assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
+        public static string Product => ApplicationInfo.Assembly.GetCustomAttribute<AssemblyProductAttribute>().Product;
+        public static string Description => ApplicationInfo.Assembly.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
+        public static string Copyright => ApplicationInfo.Assembly.GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright;
+        public static string Company => ApplicationInfo.Assembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
+    }
+
+    internal static class GitHubInfo
+    {
+        public static string Repo => ApplicationInfo.Assembly.GetCustomAttribute<GitHubAttribute>().ToString();
+        public static string Owner => ApplicationInfo.Assembly.GetCustomAttribute<GitHubAttribute>().Owner;
+        public static string Name => ApplicationInfo.Assembly.GetCustomAttribute<GitHubAttribute>().Repo;
+        public static string AssetName => ApplicationInfo.Assembly.GetCustomAttribute<GitHubAttribute>().AssetName;
+
+        public static Release LatestRelease { get; set; }
+
+        public async static Task<Release> GetLatestReleaseAsync()
+        {
+            try
+            {
+                var client = new GitHubClient(new ProductHeaderValue(ApplicationInfo.Title, ApplicationInfo.Version.ToString()));
+                return await client.Repository.Release.GetLatest(GitHubInfo.Owner, GitHubInfo.Repo);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            return null;
+        }
+
+        public async static Task CheckForUpdateAsync()
+        {
+            try
+            {
+                LatestRelease = await GetLatestReleaseAsync();
+                if (ApplicationInfo.Version < LatestRelease.GetVersion())
+                {
+                    var updateMessage = Toolkit.Messages.NewVersion;
+                    updateMessage = updateMessage.Replace("{VERSION}", LatestRelease.GetVersion().ToString());
+                    updateMessage = updateMessage.Replace("{CREATEDAT}", LatestRelease.CreatedAt.UtcDateTime.ToShortDateString());
+                    if (MessageBox.Show(updateMessage, ApplicationInfo.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        var assetName = GitHubInfo.AssetName;
+                        if (string.IsNullOrEmpty(assetName)) assetName = $"{ApplicationInfo.Product}.zip";
+                        var assetUrl = LatestRelease.Assets.FirstOrDefault(m => m.Name == assetName);
+                        var url = LatestRelease.AssetsUrl;
+                        if (assetUrl != null) url = assetUrl.BrowserDownloadUrl;
+                        if (string.IsNullOrEmpty(url)) url = GitHubInfo.Repo;
+                        if (!string.IsNullOrEmpty(url)) Process.Start(url);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
+        public static Version GetVersion(this Release release)
+        {
+            Version.TryParse(release.TagName.Replace("v", ""), out Version result);
+            return result;
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 # JumpList Toolkit
 
-JumpList Toolkit {DESCRIPTION}
+Shortcut creator for handle custom tasks as jumplist actions on a single icon at windows taskbar.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/55olxy88pignbflo?svg=true)](https://ci.appveyor.com/project/ennerperez/jumplist-toolkit)
 
