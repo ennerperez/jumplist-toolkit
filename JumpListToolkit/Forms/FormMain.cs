@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plarform.Support.IO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -22,18 +23,24 @@ namespace Toolkit.Forms
         {
             InitializeComponent();
 
-            Icon = Icon.ExtractAssociatedIcon(Assembly.GetEntryAssembly().Location);
+            Icon = Icon.ExtractAssociatedIcon(Program.Assembly.Location);
 
             // Icons
-            toolStripButtonNew.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.insert_drive_file, 48, Color.White);
-            toolStripButtonOpen.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.folder_open, 48, Color.White);
-            toolStripButtonSave.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.save, 48, Color.White);
+            toolStripButtonFile.SetImage(MaterialDesign.Instance, Program.Icon, 48, SystemColors.Control);
 
-            toolStripButtonAdd.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.add, 48, Color.White);
-            toolStripButtonEdit.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.edit, 48, Color.White);
-            toolStripButtonDelete.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.delete, 48, Color.White);
+            newToolStripMenuItem.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.insert_drive_file, 48, toolStripMenu.BackColor);
+            openToolStripMenuItem.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.folder_open, 48, toolStripMenu.BackColor);
+            saveToolStripMenuItem.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.save, 48, toolStripMenu.BackColor);
+            saveAsToolStripMenuItem.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.save, 48, toolStripMenu.BackColor);
 
-            toolStripButtonRefresh.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.refresh, 48, Color.White);
+            toolStripButtonAdd.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.add, 48, SystemColors.Control);
+            toolStripButtonEdit.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.edit, 48, SystemColors.Control);
+            toolStripButtonDelete.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.delete, 48, SystemColors.Control);
+
+            toolStripButtonUpdates.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.system_update_alt, 48, SystemColors.Control);
+
+            toolStripButtonAction.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.code, 48, SystemColors.Control);
+            toolStripButtonApply.SetImage(MaterialDesign.Instance, MaterialDesign.IconType.check, 48, SystemColors.Control);
 
 #if DEBUG
             FormHelper.ExtractResources(toolStripMenu);
@@ -48,7 +55,7 @@ namespace Toolkit.Forms
             if (Model != null)
             {
                 var collection = from item in Model
-                                 group item by item.Category into g
+                                 group item by item.Category.Trim() into g
                                  select new { g.Key, Value = g.ToList() };
 
                 listViewTasks.Groups.AddRange(collection.Select(m => new ListViewGroup(m.Key, m.Key)).ToArray());
@@ -76,6 +83,44 @@ namespace Toolkit.Forms
 
         private void FormMain_Shown(object sender, EventArgs e)
         {
+            RenderContent();
+        }
+
+        #region Drag & Drop
+
+        private void FormMain_DragDrop(object sender, DragEventArgs e)
+        {
+            bufferedPanelPreview.Visible = false;
+            e.Effect = DragDropEffects.None;
+
+            if ((e.AllowedEffect & DragDropEffects.Copy) == DragDropEffects.Copy)
+            {
+                if (((IDataObject)e.Data).GetData("FileName") is Array data && ((data.Length == 1) && (data.GetValue(0) is string)))
+                {
+                    var filename = ((string[])data)[0];
+                    if (!string.IsNullOrEmpty(filename))
+                        LoadFile(filename);
+                }
+            }
+        }
+
+        private void FormMain_DragEnter(object sender, DragEventArgs e)
+        {
+            bufferedPanelPreview.Visible = true;
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        private void FormMain_DragLeave(object sender, EventArgs e)
+        {
+            bufferedPanelPreview.Visible = false;
+        }
+
+        #endregion Drag & Drop
+
+        private void LoadFile(string item)
+        {
+            var fi = new FileInfo(item.ToString());
+            Model.Add(new Link(fi.FullName, Path.GetFileNameWithoutExtension(fi.Name)));
             RenderContent();
         }
 
@@ -123,6 +168,11 @@ namespace Toolkit.Forms
                 saveFileDialogSettings.FileName = Source;
                 SaveFileDialogSettings_FileOk(sender, new CancelEventArgs(false));
             }
+        }
+
+        private void ToolStripMenuItemSaveAs_Click(object sender, EventArgs e)
+        {
+            saveFileDialogSettings.ShowDialog();
         }
 
         private void SaveFileDialogSettings_FileOk(object sender, CancelEventArgs e)
@@ -187,22 +237,12 @@ namespace Toolkit.Forms
 
         private void ListViewTasks_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (listViewTasks.SelectedItems != null && listViewTasks.SelectedItems.OfType<ListViewItem>().Any())
-            {
-                var link = (listViewTasks.SelectedItems.OfType<ListViewItem>().FirstOrDefault().Tag as Link);
-                if (link != null)
-                    Process.Start(new ProcessStartInfo()
-                    {
-                        FileName = link.Path,
-                        Arguments = link.Path,
-                        WorkingDirectory = link.WorkingDirectory
-                    });
-            }
+            ToolStripMenuItemLaunch_Click(sender, e);
         }
 
         #endregion ItemActions
 
-        private void ToolStripButtonRefresh_Click(object sender, EventArgs e)
+        private void ToolStripButtonApply_Click(object sender, EventArgs e)
         {
             if (Model != null)
                 Program.RegisterTaskBarActions(Model);
@@ -221,7 +261,51 @@ namespace Toolkit.Forms
 
         private async void FormMain_Load(object sender, EventArgs e)
         {
-            await GitHubInfo.CheckForUpdateAsync();
+            toolStripButtonUpdates.Checked = Properties.Settings.Default.CheckForUpdates;
+
+            if (Properties.Settings.Default.CheckForUpdates)
+                await GitHubInfo.CheckForUpdateAsync();
+        }
+
+        private void ToolStripMenuItemDefault_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void ListViewTasks_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            toolStripButtonEdit.Visible = e.IsSelected;
+            toolStripButtonDelete.Visible = e.IsSelected;
+            editToolStripMenuItem.Enabled = e.IsSelected;
+            deleteToolStripMenuItem.Enabled = e.IsSelected;
+            defaultToolStripMenuItem.Enabled = e.IsSelected;
+            launchToolStripMenuItem.Enabled = e.IsSelected;
+        }
+
+        private void ToolStripMenuItemLaunch_Click(object sender, EventArgs e)
+        {
+            if (listViewTasks.SelectedItems != null && listViewTasks.SelectedItems.OfType<ListViewItem>().Any())
+            {
+                var link = (listViewTasks.SelectedItems.OfType<ListViewItem>().FirstOrDefault().Tag as Link);
+                if (link != null)
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = link.Path,
+                        Arguments = link.Path,
+                        WorkingDirectory = link.WorkingDirectory
+                    });
+            }
+        }
+
+        private void ToolStripButtonAction_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void ToolStripButtonUpdates_Click(object sender, EventArgs e)
+        {
+            var checkForUpdates = !toolStripButtonUpdates.Checked;
+            toolStripButtonUpdates.Checked = checkForUpdates;
+            Properties.Settings.Default.CheckForUpdates = checkForUpdates;
+            Properties.Settings.Default.Save();
         }
     }
 }

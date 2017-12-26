@@ -29,19 +29,22 @@ namespace Toolkit.Forms
             InitializeBinding();
         }
 
-        private void buttonFilePathExamine_Click(object sender, EventArgs e)
+        private void ButtonFilePathExamine_Click(object sender, EventArgs e)
         {
             if (openFileDialogFile.ShowDialog() == DialogResult.OK)
                 textBoxFilePath.Text = openFileDialogFile.FileName;
+
+            if (string.IsNullOrEmpty(textBoxTitle.Text))
+                textBoxTitle.Text = System.IO.Path.GetFileNameWithoutExtension(textBoxFilePath.Text);
         }
 
-        private void buttonWorkdirExamine_Click(object sender, EventArgs e)
+        private void ButtonWorkdirExamine_Click(object sender, EventArgs e)
         {
             if (folderBrowserDialogWorkdir.ShowDialog() == DialogResult.OK)
                 textBoxWorkdir.Text = folderBrowserDialogWorkdir.SelectedPath;
         }
 
-        private void buttonIconLocationExamine_Click(object sender, EventArgs e)
+        private void ButtonIconLocationExamine_Click(object sender, EventArgs e)
         {
             if (openFileDialogFile.ShowDialog() == DialogResult.OK)
             {
@@ -50,7 +53,7 @@ namespace Toolkit.Forms
             }
         }
 
-        private void numericUpDownIconIndex_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDownIconIndex_ValueChanged(object sender, EventArgs e)
         {
             PreviewIcon();
         }
@@ -68,7 +71,7 @@ namespace Toolkit.Forms
             }
         }
 
-        private void buttonOk_Click(object sender, EventArgs e)
+        private void ButtonOk_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(Model.Title) && !string.IsNullOrEmpty(Model.Path) && System.IO.File.Exists(Model.Path))
             {

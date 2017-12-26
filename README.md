@@ -12,6 +12,8 @@ See the [changelog](CHANGELOG.md) for changes.
 
 ## Roadmap
 
+- [ ] Custom shortcut creation
+- [ ] Launcher
 - [ ] Run as admin
 - [ ] Automatic pin/unpin to taskbar
 
