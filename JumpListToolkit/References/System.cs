@@ -134,7 +134,7 @@ namespace System
             {
                 Bitmap bmp = new Bitmap(img.Width, img.Height);
                 using (Graphics gfx = Graphics.FromImage(bmp))
-                using (SolidBrush brush = new SolidBrush(Color.FromArgb(43, 43, 43)))
+                using (SolidBrush brush = new SolidBrush(Toolkit.Properties.Settings.Default.BackgroundColor))
                 {
                     gfx.FillRectangle(brush, 0, 0, bmp.Width, bmp.Height);
                     gfx.DrawImage(img, 0, 0);
